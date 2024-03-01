@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+  name: fortune-ingress
+  namespace: default
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: grpc.vovatest.tech
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: go-grpc-greeter-server
+            port:
+              number: 80
+  # tls:
+  # # This secret must exist beforehand
+  # # The cert must also contain the subj-name grpctest.dev.mydomain.com
+  # # https://github.com/kubernetes/ingress-nginx/blob/master/docs/examples/PREREQUISITES.md#tls-certificates
+  # - secretName: wildcard.dev.mydomain.com
+  #   hosts:
+  #     - grpctest.dev.mydomain.com
